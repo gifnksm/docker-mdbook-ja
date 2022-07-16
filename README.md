@@ -9,3 +9,65 @@ This container contains following tools:
 * [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)
 
 [mdBook]: https://github.com/rust-lang/mdBook
+
+## Usage
+
+Running with Docker:
+
+```console
+# running mdBook
+$ docker run \
+    -it --rm --init --user $(id -u):$(id -g) -v $(pwd):/book:rw --net host \
+    ghcr.io/gifnksm/mdbook-ja \
+    mdbook serve
+
+# running markdown lint
+$ docker run \
+    -it --rm --init --user $(id -u):$(id -g) -v $(pwd):/book:rw --net host \
+    ghcr.io/gifnksm/mdbook-ja \
+    markdownlint .
+```
+
+You can also use Compose:
+
+```yaml
+# docker-compose.yml
+version: '3.9'
+
+x-service:
+  &default-service
+  image: ghcr.io/gifnksm/mdbook-ja
+  init: true
+  volumes: [".:/book:rw"]
+  network_mode: "host"
+  user: "${UID}:${GID}"
+
+services:
+  mdbook:
+    <<: *default-service
+    entrypoint: ["mdbook"]
+    command: ["serve"]
+
+  mdbook-mermaid:
+    <<: *default-service
+    entrypoint: ["mdbook-mermaid"]
+
+  markdownlint:
+    <<: *default-service
+    entrypoint: ["markdownlint"]
+```
+
+```console
+# setting up environment variables
+$ echo "UID=$(id -u)" >> .env
+$ echo "GID=$(id -u)" >> .env
+
+# serving mdBook website
+$ docker compose up
+
+# running mdBook build
+$ docker compose run --rm mdbook build
+
+# running markdown lint
+$ docker compose run --rm markdownlint .
+```
