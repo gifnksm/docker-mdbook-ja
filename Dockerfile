@@ -1,9 +1,11 @@
 FROM rust:alpine as rust_builder
 WORKDIR /workdir
 
-RUN apk add build-base
-RUN cargo install mdbook --root /workdir
-RUN cargo install mdbook-mermaid --root /workdir
+RUN \
+    apk add build-base --no-cache && \
+    cargo install mdbook --root /workdir && \
+    cargo install mdbook-mermaid --root /workdir && \
+    :
 
 FROM node:alpine
 WORKDIR /workdir
