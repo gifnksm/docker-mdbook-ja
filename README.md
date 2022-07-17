@@ -33,8 +33,7 @@ $ docker run \
 You can also use Compose:
 
 ```yaml
-# docker-compose.yml
-version: '3.9'
+# docker-compose.ymlversion: '3.9'
 
 x-service:
   &default-service
@@ -57,6 +56,10 @@ services:
   markdownlint:
     <<: *default-service
     entrypoint: ["markdownlint"]
+
+  textlint:
+    <<: *default-service
+    entrypoint: ["textlint"]
 ```
 
 ```console
