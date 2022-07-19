@@ -1,36 +1,29 @@
-FROM alpine as rust_builder
+FROM alpine:3.16 as rust_builder
 WORKDIR /build
 
 RUN \
     apk --no-cache upgrade && \
-    apk --no-cache add build-base rust cargo && \
-    cargo install mdbook --root /build && \
-    cargo install mdbook-mermaid --root /build && \
+    apk --no-cache add build-base~=0.5 cargo~=1 && \
+    cargo install mdbook --version 0.4.20 --root /build && \
+    cargo install mdbook-mermaid --version 0.11.1 --root /build && \
     :
 
-FROM alpine
+FROM alpine:3.16 as node_builder
+WORKDIR /
+
+COPY package.json package-lock.json /
+RUN \
+    apk --no-cache upgrade && \
+    apk --no-cache add npm~=8 && \
+    npm install && npm cache clean --force
+
+FROM alpine:3.16
 WORKDIR /book
+ENV PATH $PATH:/node_modules/.bin
 
 RUN \
     apk --no-cache upgrade && \
-    apk --no-cache add npm cargo && \
-    npm install --omit dev -g markdownlint-cli && \
-    npm install --omit dev -g textlint && \
-    npm install --omit dev -g textlint-rule-doubled-spaces && \
-    npm install --omit dev -g textlint-rule-footnote-order && \
-    npm install --omit dev -g textlint-rule-preset-ja-technical-writing && \
-    npm install --omit dev -g textlint-rule-no-empty-section && \
-    npm install --omit dev -g textlint-rule-no-mixed-zenkaku-and-hankaku-alphabet && \
-    npm install --omit dev -g textlint-rule-period-in-list-item && \
-    npm install --omit dev -g textlint-rule-prefer-tari-tari && \
-    npm install --omit dev -g textlint-rule-ja-hiragana-keishikimeishi && \
-    npm install --omit dev -g textlint-rule-ja-hiragana-fukushi && \
-    npm install --omit dev -g textlint-rule-ja-hiragana-hojodoushi && \
-    npm install --omit dev -g textlint-rule-ja-no-orthographic-variants && \
-    npm install --omit dev -g @textlint-rule/textlint-rule-no-duplicate-abbr && \
-    npm install --omit dev -g @textlint-ja/textlint-rule-no-insert-dropping-sa && \
-    npm install --omit dev -g @textlint-ja/textlint-rule-no-synonyms && \
-    npm install --omit dev -g sudachi-synonyms-dictionary && \
-    npm cache clean --force && \
+    apk --no-cache add npm~=8 cargo~=1 && \
     :
 COPY --from=rust_builder /build/bin/* /usr/local/bin/
+COPY --from=node_builder /node_modules /node_modules
