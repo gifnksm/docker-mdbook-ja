@@ -1,0 +1,28 @@
+{
+  "name": "builder",
+  "version": "1.0.0",
+  "description": "Dockerfile including [mdBook] and tools for writing Japanese technical documentation.",
+  "repository": {
+    "type": "git",
+    "url": "git@sdt-gitlab.vpdc.sg.soft.fujitsu.com:system_soft/book/builder.git"
+  },
+  "dependencies": {
+    "@textlint-ja/textlint-rule-no-insert-dropping-sa": "^2.0.1",
+    "@textlint-ja/textlint-rule-no-synonyms": "^1.3.0",
+    "@textlint-rule/textlint-rule-no-duplicate-abbr": "^1.0.2",
+    "markdownlint-cli": "^0.32.0",
+    "sudachi-synonyms-dictionary": "^10.0.0",
+    "textlint": "^12.2.1",
+    "textlint-rule-doubled-spaces": "^1.0.0",
+    "textlint-rule-footnote-order": "^1.0.3",
+    "textlint-rule-ja-hiragana-fukushi": "^1.3.0",
+    "textlint-rule-ja-hiragana-hojodoushi": "^1.0.4",
+    "textlint-rule-ja-hiragana-keishikimeishi": "^1.1.0",
+    "textlint-rule-ja-no-orthographic-variants": "^2.0.0",
+    "textlint-rule-no-empty-section": "^1.1.0",
+    "textlint-rule-no-mixed-zenkaku-and-hankaku-alphabet": "^1.0.1",
+    "textlint-rule-period-in-list-item": "^0.3.2",
+    "textlint-rule-prefer-tari-tari": "^1.0.3",
+    "textlint-rule-preset-ja-technical-writing": "^7.0.0"
+  }
+}
