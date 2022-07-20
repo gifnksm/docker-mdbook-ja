@@ -9,9 +9,9 @@ RUN \
     :
 
 FROM alpine:3.16 as node_builder
-WORKDIR /
+WORKDIR /npm
 
-COPY package.json package-lock.json /
+COPY package.json package-lock.json /npm/
 RUN \
     apk --no-cache upgrade && \
     apk --no-cache add npm~=8 && \
@@ -19,11 +19,11 @@ RUN \
 
 FROM alpine:3.16
 WORKDIR /book
-ENV PATH $PATH:/node_modules/.bin
+ENV PATH $PATH:/npm/node_modules/.bin
 
 RUN \
     apk --no-cache upgrade && \
     apk --no-cache add npm~=8 cargo~=1 && \
     :
 COPY --from=rust_builder /build/bin/* /usr/local/bin/
-COPY --from=node_builder /node_modules /node_modules
+COPY --from=node_builder /npm /npm
