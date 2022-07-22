@@ -3,7 +3,7 @@ WORKDIR /build
 COPY scripts/install_rust_package /build/
 RUN \
     set -eux && \
-    apk --no-cache add musl-dev~=1 curl~=7 build-base~=0 perl~=5 && \
+    apk --no-cache add curl~=7 musl-dev~=1 build-base~=0 perl~=5 && \
     mkdir -p /build/bin && \
     :
 
@@ -45,7 +45,7 @@ ENV PATH $PATH:/npm/node_modules/.bin
 RUN \
     set -eux && \
     apk --no-cache upgrade && \
-    apk --no-cache add npm~=8 && \
+    apk --no-cache add npm~=8 musl-dev~=1 build-base~=0 perl~=5 && \
     :
 COPY --from=mdbook_builder /build/bin/* /usr/local/bin/
 COPY --from=mdbook_mermaid_builder /build/bin/* /usr/local/bin/
