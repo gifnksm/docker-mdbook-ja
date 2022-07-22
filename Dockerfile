@@ -1,11 +1,12 @@
 FROM alpine:3.16 as rust_builder
 WORKDIR /build
 
+COPY scripts/install_rust_package /build/
+
 RUN \
     apk --no-cache upgrade && \
-    apk --no-cache add build-base~=0.5 cargo~=1 && \
-    cargo install mdbook --version 0.4.20 --root /build && \
-    cargo install mdbook-mermaid --version 0.11.1 --root /build && \
+    ./install_rust_package mdbook 0.4.20 && \
+    ./install_rust_package mdbook-mermaid 0.11.1 && \
     :
 
 FROM alpine:3.16 as node_builder
