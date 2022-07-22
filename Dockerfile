@@ -7,6 +7,7 @@ RUN \
     apk --no-cache upgrade && \
     ./install_rust_package mdbook 0.4.20 && \
     ./install_rust_package mdbook-mermaid 0.11.1 && \
+    ./install_rust_package mdbook-linkcheck 0.7.6 && \
     :
 
 FROM alpine:3.16 as node_builder

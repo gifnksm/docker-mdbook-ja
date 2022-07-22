@@ -14,14 +14,13 @@ binary_url=""
 
 case "${package}" in
 mdbook)
-    # case "${arch}" in
-    # x86_64) binary_url="https://github.com/rust-lang/mdBook/releases/download/v${version}/mdbook-v${version}-${arch}-unknown-linux-gnu.tar.gz" ;;
-    # esac
     ;;
 mdbook-mermaid)
     case "${arch}" in
     x86_64) binary_url="https://github.com/badboy/mdbook-mermaid/releases/download/v${version}/mdbook-mermaid-v${version}-x86_64-unknown-linux-musl.tar.gz" ;;
     esac
+    ;;
+mdbook-linkcheck)
     ;;
 esac
 
