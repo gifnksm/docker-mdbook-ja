@@ -15,7 +15,7 @@ COPY package.json package-lock.json /npm/
 RUN \
     apk --no-cache upgrade && \
     apk --no-cache add npm~=8 && \
-    npm install && npm cache clean --force
+    npm ci && npm cache clean --force
 
 FROM alpine:3.16
 WORKDIR /book
