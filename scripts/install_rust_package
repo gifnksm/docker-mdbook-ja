@@ -1,0 +1,44 @@
+#!/bin/sh -eu
+
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 <package_name> <package_version>"
+    exit 1
+fi
+
+set -x
+
+package="$1"
+version="$2"
+arch="$(uname -m)"
+binary_url=""
+
+case "${package}" in
+mdbook)
+    # case "${arch}" in
+    # x86_64) binary_url="https://github.com/rust-lang/mdBook/releases/download/v${version}/mdbook-v${version}-${arch}-unknown-linux-gnu.tar.gz" ;;
+    # esac
+    ;;
+mdbook-mermaid)
+    case "${arch}" in
+    x86_64) binary_url="https://github.com/badboy/mdbook-mermaid/releases/download/v${version}/mdbook-mermaid-v${version}-x86_64-unknown-linux-musl.tar.gz" ;;
+    esac
+    ;;
+esac
+
+if [ -z "${binary_url}" ]; then
+    apk --no-cache add build-base=~=0.5 cargo~=1
+    cargo install "${package}" --version "${version}" --root /build
+else
+    apk --no-cache add curl~=7
+    mkdir -p /build/bin
+    curl -L "${binary_url}" | tar -xzv -C ./bin/
+fi
+
+case "${package}" in
+mdbook)
+    /build/bin/mdbook --version
+    ;;
+mdbook-mermaid)
+    /build/bin/mdbook-mermaid --version
+    ;;
+esac
