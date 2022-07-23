@@ -11,23 +11,49 @@ package="$1"
 version="$2"
 arch="$(uname -m)"
 binary_url=""
+extract=""
 
 case "${package}" in
 mdbook)
     case "${arch}" in
-    x86_64|aarch64) binary_url="https://github.com/gifnksm/mdBook/releases/download/patch-v${version}/mdbook-patch-v${version}-${arch}-unknown-linux-musl.tar.gz" ;;
+    x86_64)
+        binary_url="https://github.com/rust-lang/mdBook/releases/download/v${version}/mdbook-v${version}-${arch}-unknown-linux-gnu.tar.gz"
+        extract="mdbook"
+        ;;
     esac
     ;;
 mdbook-mermaid)
     case "${arch}" in
-    x86_64) binary_url="https://github.com/badboy/mdbook-mermaid/releases/download/v${version}/mdbook-mermaid-v${version}-x86_64-unknown-linux-musl.tar.gz" ;;
+    x86_64)
+        binary_url="https://github.com/badboy/mdbook-mermaid/releases/download/v${version}/mdbook-mermaid-v${version}-${arch}-unknown-linux-gnu.tar.gz"
+        extract="mdbook-mermaid"
+        ;;
     esac
     ;;
-mdbook-linkcheck) ;;
+mdbook-linkcheck)
+    case "${arch}" in
+    x86_64)
+        binary_url="https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/download/v${version}/mdbook-linkcheck.${arch}-unknown-linux-gnu.zip"
+        extract="mdbook-linkcheck"
+        ;;
+    esac
+    ;;
 esac
 
-if [ -z "${binary_url}" ]; then
+case "${binary_url}" in
+*.tar.gz)
+    curl -L "${binary_url}" > binary.tar.gz
+    tar -xzvf binary.tar.gz
+    cp "${extract}" /build/bin/
+    chmod +x /build/bin/"${extract}"
+    ;;
+*.zip)
+    curl -L "${binary_url}" > binary.zip
+    unzip binary.zip
+    cp "${extract}" /build/bin/
+    chmod +x /build/bin/"${extract}"
+    ;;
+"")
     cargo install "${package}" --version "${version}" --root /build
-else
-    curl -L "${binary_url}" | tar -xzv -C ./bin/
-fi
+    ;;
+esac
