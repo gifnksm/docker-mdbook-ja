@@ -13,7 +13,11 @@ arch="$(uname -m)"
 binary_url=""
 
 case "${package}" in
-mdbook) ;;
+mdbook)
+    case "${arch}" in
+    x86_64|aarch64) binary_url="https://github.com/gifnksm/mdBook/releases/download/patch-v${version}/mdbook-patch-v${version}-${arch}-unknown-linux-musl.tar.gz" ;;
+    esac
+    ;;
 mdbook-mermaid)
     case "${arch}" in
     x86_64) binary_url="https://github.com/badboy/mdbook-mermaid/releases/download/v${version}/mdbook-mermaid-v${version}-x86_64-unknown-linux-musl.tar.gz" ;;
