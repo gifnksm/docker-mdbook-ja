@@ -10,7 +10,7 @@ RUN \
 FROM rust_builder as mdbook_builder
 RUN \
     set -eux && \
-    ./install_rust_package mdbook 0.4.20 && \
+    ./install_rust_package mdbook 0.4.21 && \
     /build/bin/mdbook --version && \
     :
 
