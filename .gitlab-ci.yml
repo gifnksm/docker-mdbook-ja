@@ -1,0 +1,3 @@
+include:
+  - local: "/.gitlab/workflows/docker-publish.yml"
+  - local: "/.gitlab/workflows/lint.yml"

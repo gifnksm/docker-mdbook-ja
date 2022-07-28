@@ -1,0 +1,47 @@
+.build:
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - |-
+      KANIKO_PROXY_BUILD_ARGS=""
+      KANIKO_CFG="\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}"
+      if [ "x${http_proxy}" != "x" -o "x${https_proxy}" != "x" ]; then
+        KANIKO_CFG="${KANIKO_CFG}, \"proxies\": { \"default\": { \"httpProxy\": \"${http_proxy}\", \"httpsProxy\": \"${https_proxy}\", \"noProxy\": \"${no_proxy}\"}}"
+        KANIKO_PROXY_BUILD_ARGS="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy} --build-arg no_proxy=${no_proxy}"
+      fi
+      KANIKO_CFG="{ ${KANIKO_CFG} }"
+      echo "${KANIKO_CFG}" > /kaniko/.docker/config.json
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      ${KANIKO_PROXY_BUILD_ARGS}
+      --destination "${CI_REGISTRY_IMAGE}:${IMAGE_TAG}"
+      ${KANIKO_EXTRA_ARGS}
+
+build-merge-request:
+  extends: .build
+  variables:
+    IMAGE_TAG: latest
+    KANIKO_EXTRA_ARGS: "--no-push"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+build-latest:
+  extends: .build
+  variables:
+    IMAGE_TAG: latest
+    KANIKO_EXTRA_ARGS: ""
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
+build-tag:
+  extends: .build
+  variables:
+    IMAGE_TAG: $CI_COMMIT_TAG
+    KANIKO_EXTRA_ARGS: ""
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG
