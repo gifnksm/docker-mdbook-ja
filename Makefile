@@ -7,15 +7,23 @@ SHELL := bash
 .DELETE_ON_ERROR:
 .SECONDEXPANSION:
 
-IMAGE_NAME ?= ghcr.io/gifnksm/mdbook-ja
+GITHUB_IMAGE_NAME ?= ghcr.io/gifnksm/mdbook-ja
+GITLAB_IMAGE_NAME ?= registry.gitlab.com/gifnksm/docker-mdbook-ja
 
 .PHONY: default
 default: build
 
 ## Build a Docker image from Dockerfile
 .PHONY: build
-build:
-	docker build -t $(IMAGE_NAME) .
+build: build-github build-gitlab
+
+.PHONY: build-github
+build-github:
+	docker build -t $(GITHUB_IMAGE_NAME) .
+
+.PHONY: build-gitlab
+build-gitlab:
+	docker build -t $(GITLAB_IMAGE_NAME) .
 
 ## Print this message
 help:

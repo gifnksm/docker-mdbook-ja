@@ -13,6 +13,13 @@ This container contains following tools:
 
 [mdBook]: https://github.com/rust-lang/mdBook
 
+## Container Image
+
+The following pre-built images are available:
+
+* `ghcr.io/gifnksm/mdbook-ja` (GitHub Container Registry)
+* `registry.gitlab.com/gifnksm/docker-mdbook-ja` (GitLab Container Registry)
+
 ## Usage
 
 Running with Docker:
@@ -77,3 +84,10 @@ $ docker compose run --rm mdbook build
 # running markdown lint
 $ docker compose run --rm markdownlint .
 ```
+
+## Source Repository
+
+This repository is hosted at:
+
+* <https://github.com/gifnksm/docker-mdbook-ja>
+* <https://gitlab.com/gifnksm/docker-mdbook-ja>
