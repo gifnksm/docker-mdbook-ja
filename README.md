@@ -17,8 +17,8 @@ This container contains following tools:
 
 The following pre-built images are available:
 
-* `ghcr.io/gifnksm/mdbook-ja` (GitHub Container Registry)
-* `registry.gitlab.com/gifnksm/docker-mdbook-ja` (GitLab Container Registry)
+* [`ghcr.io/gifnksm/mdbook-ja`](https://github.com/gifnksm/docker-mdbook-ja/pkgs/container/mdbook-ja) (GitHub Container Registry)
+* [`registry.gitlab.com/gifnksm/docker-mdbook-ja`](https://gitlab.com/gifnksm/docker-mdbook-ja/container_registry/3281810) (GitLab Container Registry)
 
 ## Usage
 
