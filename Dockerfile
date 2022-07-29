@@ -24,7 +24,7 @@ RUN \
 FROM base as mdbook_mermaid_builder
 RUN \
     set -eux && \
-    ./install_rust_package mdbook-mermaid 0.11.1 && \
+    ./install_rust_package mdbook-mermaid 0.11.2 && \
     /build/bin/mdbook-mermaid --version && \
     :
 
