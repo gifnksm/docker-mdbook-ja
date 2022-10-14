@@ -24,14 +24,14 @@ RUN \
 FROM base as mdbook_mermaid_builder
 RUN \
     set -eux && \
-    ./install_rust_package mdbook-mermaid 0.11.2 && \
+    ./install_rust_package mdbook-mermaid 0.12.0 && \
     /build/bin/mdbook-mermaid --version && \
     :
 
 FROM base as mdbook_linkcheck_builder
 RUN \
     set -eux && \
-    ./install_rust_package mdbook-linkcheck 0.7.6 && \
+    ./install_rust_package mdbook-linkcheck 0.7.7 && \
     /build/bin/mdbook-linkcheck --version && \
     :
 
