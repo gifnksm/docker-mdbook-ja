@@ -17,14 +17,14 @@ RUN \
 FROM base as mdbook_builder
 RUN \
     set -eux && \
-    ./install_rust_package mdbook 0.4.21 && \
+    ./install_rust_package mdbook 0.4.25 && \
     /build/bin/mdbook --version && \
     :
 
 FROM base as mdbook_mermaid_builder
 RUN \
     set -eux && \
-    ./install_rust_package mdbook-mermaid 0.12.0 && \
+    ./install_rust_package mdbook-mermaid 0.12.6 && \
     /build/bin/mdbook-mermaid --version && \
     :
 
@@ -38,7 +38,7 @@ RUN \
 FROM base as mdbook_pdf_builder
 RUN \
     set -eux && \
-    ./install_rust_package mdbook-pdf 0.1.3 && \
+    ./install_rust_package mdbook-pdf 0.1.4 && \
     :
 
 FROM base as node_builder
