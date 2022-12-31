@@ -41,7 +41,7 @@ mdbook-linkcheck)
 mdbook-pdf)
     case "${arch}" in
     x86_64)
-        binary_url="https://github.com/HollowMan6/mdbook-pdf/releases/download/v${version}/mdbook-pdf-v${version}-${arch}-unknown-linux-gnu.zip"
+        binary_url="https://github.com/HollowMan6/mdbook-pdf/releases/download/v${version}/mdbook-pdf-v${version}-${arch}-unknown-linux-gnu"
         extract="mdbook-pdf"
         ;;
     esac
@@ -50,18 +50,23 @@ esac
 
 case "${binary_url}" in
 *.tar.gz)
-    curl -L "${binary_url}" > binary.tar.gz
+    curl -L "${binary_url}" >binary.tar.gz
     tar -xzvf binary.tar.gz
     cp "${extract}" /build/bin/
     chmod +x /build/bin/"${extract}"
     ;;
 *.zip)
-    curl -L "${binary_url}" > binary.zip
+    curl -L "${binary_url}" >binary.zip
     unzip binary.zip
     cp "${extract}" /build/bin/
     chmod +x /build/bin/"${extract}"
     ;;
 "")
     cargo install "${package}" --version "${version}" --root /build
+    ;;
+*)
+    curl -L "${binary_url}" >"${extract}"
+    cp "${extract}" /build/bin
+    chmod +x /build/bin/"${extract}"
     ;;
 esac
