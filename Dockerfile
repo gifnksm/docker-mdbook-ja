@@ -1,67 +1,57 @@
+# syntax=docker/dockerfile:1
+
 FROM rust:slim as base
 WORKDIR /build
-RUN \
-    set -eux && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends curl unzip chromium fonts-noto-cjk && \
-    curl -fsSL https://deb.nodesource.com/setup_current.x > setup_current.x && \
-    bash setup_current.x && \
-    rm setup_current.x && \
-    apt-get install -y --no-install-recommends nodejs && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    :
+SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+RUN <<EOF
+    apt-get update
+    apt-get install -y --no-install-recommends curl unzip chromium fonts-noto-cjk
+    curl -fsSL https://deb.nodesource.com/setup_current.x > setup_current.x
+    bash setup_current.x
+    rm setup_current.x
+    apt-get install -y --no-install-recommends nodejs
+    apt-get clean
+    rm -rf /var/lib/apt/lists/*
+EOF
+
+SHELL ["/bin/sh", "-c"]
 
 FROM base as rust_builder
-RUN \
-    set -eux && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends jq && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    mkdir -p /build/bin && \
-    :
+SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+RUN <<EOF
+    apt-get update
+    apt-get install -y --no-install-recommends jq
+    apt-get clean
+    rm -rf /var/lib/apt/lists/*
+    mkdir -p /build/bin
+EOF
+
 COPY . /build/
 
 FROM rust_builder as mdbook_builder
-RUN \
-    set -eux && \
-    ./scripts/install_rust_package mdbook && \
-    /build/bin/mdbook --version && \
-    :
+RUN <<EOF
+    ./scripts/install_rust_package mdbook
+    /build/bin/mdbook --version
+EOF
 
 FROM rust_builder as mdbook_mermaid_builder
-RUN \
-    set -eux && \
-    ./scripts/install_rust_package mdbook-mermaid && \
-    /build/bin/mdbook-mermaid --version && \
-    :
+RUN ./scripts/install_rust_package mdbook-mermaid
 
 FROM rust_builder as mdbook_linkcheck_builder
-RUN \
-    set -eux && \
-    ./scripts/install_rust_package mdbook-linkcheck && \
-    /build/bin/mdbook-linkcheck --version && \
-    :
+RUN ./scripts/install_rust_package mdbook-linkcheck
 
 FROM rust_builder as mdbook_pdf_builder
-RUN \
-    set -eux && \
-    ./scripts/install_rust_package mdbook-pdf && \
-    :
+RUN ./scripts/install_rust_package mdbook-pdf
 
 FROM base as node_builder
 WORKDIR /npm
 ENV PATH $PATH:/npm/node_modules/.bin
 
 COPY package.json package-lock.json /npm/
-RUN \
-    set -eux && \
-    npm ci && \
-    npm cache clean --force && \
-    /npm/node_modules/.bin/markdownlint --version && \
-    /npm/node_modules/.bin/textlint --version && \
-    :
+RUN <<EOF
+    npm ci
+    npm cache clean --force
+EOF
 
 FROM base
 WORKDIR /book
