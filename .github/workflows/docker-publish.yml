@@ -85,5 +85,5 @@ jobs:
         # against the sigstore community Fulcio instance.
         run: |
           echo "${{ steps.meta.outputs.tags }}" | while read tag; do
-            cosign sign --key env://COSIGN_PRIVATE_KEY ${tag}@${{ steps.build-and-push.outputs.digest }}
+            cosign sign --key env://COSIGN_PRIVATE_KEY ${tag}@${{ steps.build-and-push.outputs.digest }} --yes
           done
