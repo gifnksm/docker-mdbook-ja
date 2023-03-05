@@ -43,10 +43,11 @@ mdbook-linkcheck)
     ;;
 mdbook-pdf)
     case "${arch}" in
-    x86_64)
-        binary_url="https://github.com/HollowMan6/mdbook-pdf/releases/download/v${version}/mdbook-pdf-v${version}-${arch}-unknown-linux-gnu"
-        extract="mdbook-pdf"
-        ;;
+    # pre-built binary uses glibc 2.34, that is newer than debian bullseye's glibc
+    # x86_64)
+    #     binary_url="https://github.com/HollowMan6/mdbook-pdf/releases/download/v${version}/mdbook-pdf-v${version}-${arch}-unknown-linux-gnu"
+    #     extract="mdbook-pdf"
+    #     ;;
     esac
     ;;
 esac
