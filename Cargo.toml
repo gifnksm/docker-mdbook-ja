@@ -10,4 +10,3 @@ publish = false
 mdbook = "0.4.28"
 mdbook-linkcheck = "0.7.7"
 mdbook-mermaid = "0.12.6"
-mdbook-pdf = "0.1.5"
