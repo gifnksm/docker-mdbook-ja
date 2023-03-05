@@ -1,6 +1,5 @@
 FROM rust:slim as base
 WORKDIR /build
-COPY scripts/install_rust_package /build/
 RUN \
     set -eux && \
     apt-get update && \
@@ -11,34 +10,44 @@ RUN \
     apt-get install -y --no-install-recommends nodejs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    mkdir -p /build/bin && \
     :
 
-FROM base as mdbook_builder
+FROM base as rust_builder
 RUN \
     set -eux && \
-    ./install_rust_package mdbook 0.4.25 && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends jq && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /build/bin && \
+    :
+COPY . /build/
+
+FROM rust_builder as mdbook_builder
+RUN \
+    set -eux && \
+    ./scripts/install_rust_package mdbook && \
     /build/bin/mdbook --version && \
     :
 
-FROM base as mdbook_mermaid_builder
+FROM rust_builder as mdbook_mermaid_builder
 RUN \
     set -eux && \
-    ./install_rust_package mdbook-mermaid 0.12.6 && \
+    ./scripts/install_rust_package mdbook-mermaid && \
     /build/bin/mdbook-mermaid --version && \
     :
 
-FROM base as mdbook_linkcheck_builder
+FROM rust_builder as mdbook_linkcheck_builder
 RUN \
     set -eux && \
-    ./install_rust_package mdbook-linkcheck 0.7.7 && \
+    ./scripts/install_rust_package mdbook-linkcheck && \
     /build/bin/mdbook-linkcheck --version && \
     :
 
-FROM base as mdbook_pdf_builder
+FROM rust_builder as mdbook_pdf_builder
 RUN \
     set -eux && \
-    ./install_rust_package mdbook-pdf 0.1.4 && \
+    ./scripts/install_rust_package mdbook-pdf && \
     :
 
 FROM base as node_builder
