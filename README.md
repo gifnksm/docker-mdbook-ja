@@ -7,7 +7,6 @@ This container contains the following tools:
 * [mdBook]
 * [mdbook-mermaid](https://github.com/badboy/mdbook-mermaid)
 * [mdbook-linkcheck](https://github.com/Michael-F-Bryan/mdbook-linkcheck)
-* [mdbook-pdf](https://github.com/HollowMan6/mdbook-pdf)
 * [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)
 * [textlint](https://textlint.github.io/)
 * cargo (for `mdbook test`)

@@ -40,9 +40,6 @@ RUN ./scripts/install_rust_package mdbook-mermaid
 FROM rust_builder as mdbook_linkcheck_builder
 RUN ./scripts/install_rust_package mdbook-linkcheck
 
-FROM rust_builder as mdbook_pdf_builder
-RUN ./scripts/install_rust_package mdbook-pdf
-
 FROM base as node_builder
 WORKDIR /npm
 ENV PATH $PATH:/npm/node_modules/.bin
@@ -59,5 +56,4 @@ ENV PATH $PATH:/npm/node_modules/.bin
 COPY --from=mdbook_builder /build/bin/* /usr/local/bin/
 COPY --from=mdbook_mermaid_builder /build/bin/* /usr/local/bin/
 COPY --from=mdbook_linkcheck_builder /build/bin/* /usr/local/bin/
-COPY --from=mdbook_pdf_builder /build/bin/* /usr/local/bin/
 COPY --from=node_builder /npm /npm
