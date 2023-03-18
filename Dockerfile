@@ -14,6 +14,8 @@ RUN <<EOF
     rm -rf /var/lib/apt/lists/*
 EOF
 
+ENV CARGO_REGISTRIES_CRATES_IO_PROCOTOL=sparse
+
 SHELL ["/bin/sh", "-c"]
 
 FROM base as rust_builder
