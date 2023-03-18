@@ -3,15 +3,16 @@
 FROM rust:slim as base
 WORKDIR /build
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
-RUN <<EOF
+RUN \
+  --mount=type=cache,target=/var/lib/apt/lists \
+  --mount=type=cache,target=/var/cache/apt/archives \
+  <<EOF
     apt-get update
-    apt-get install -y --no-install-recommends curl unzip chromium fonts-noto-cjk
+    apt-get install -y --no-install-recommends curl
     curl -fsSL https://deb.nodesource.com/setup_current.x > setup_current.x
     bash setup_current.x
     rm setup_current.x
     apt-get install -y --no-install-recommends nodejs
-    apt-get clean
-    rm -rf /var/lib/apt/lists/*
 EOF
 
 ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
@@ -20,21 +21,19 @@ SHELL ["/bin/sh", "-c"]
 
 FROM base as rust_builder
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
-RUN <<EOF
+RUN \
+  --mount=type=cache,target=/var/lib/apt/lists \
+  --mount=type=cache,target=/var/cache/apt/archives \
+  <<EOF
     apt-get update
     apt-get install -y --no-install-recommends jq build-essential
-    apt-get clean
-    rm -rf /var/lib/apt/lists/*
     mkdir -p /build/bin
 EOF
 
 COPY . /build/
 
 FROM rust_builder as mdbook_builder
-RUN <<EOF
-    ./scripts/install_rust_package mdbook
-    /build/bin/mdbook --version
-EOF
+RUN ./scripts/install_rust_package mdbook
 
 FROM rust_builder as mdbook_mermaid_builder
 RUN ./scripts/install_rust_package mdbook-mermaid
