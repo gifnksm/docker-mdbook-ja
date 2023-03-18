@@ -9,11 +9,8 @@ set -x
 set -o pipefail
 
 package="$1"
-arch="$(uname -m)"
-binary_url=""
-extract=""
-
 version="$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].dependencies[] | select (.name == "'"${package}"'").req' | sed 's/^\^//')"
+
 echo "Installing ${package} ${version}..." >&2
 
 cargo install "${package}" --version "${version}" --root /build
