@@ -14,7 +14,7 @@ RUN <<EOF
     rm -rf /var/lib/apt/lists/*
 EOF
 
-ENV CARGO_REGISTRIES_CRATES_IO_PROCOTOL=sparse
+ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 
 SHELL ["/bin/sh", "-c"]
 
