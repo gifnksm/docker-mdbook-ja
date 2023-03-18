@@ -22,7 +22,7 @@ FROM base as rust_builder
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 RUN <<EOF
     apt-get update
-    apt-get install -y --no-install-recommends jq
+    apt-get install -y --no-install-recommends jq build-essential
     apt-get clean
     rm -rf /var/lib/apt/lists/*
     mkdir -p /build/bin
