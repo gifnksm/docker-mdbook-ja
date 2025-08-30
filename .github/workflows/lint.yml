@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # https://github.com/hadolint/hadolint-action
       - name: Lint Dockerflle
@@ -18,6 +18,6 @@ jobs:
   shellcheck:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Run ShellCheck
       uses: ludeeus/action-shellcheck@master
